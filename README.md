@@ -3,18 +3,38 @@
 ## Prerequisite : 
 Python3 prefer Anaconda 
 
-## Modules   
+## Packages   
 
 Streams package that supports building stream 
 ```bash
 pip install streams 
+```
+Install the messagehub support
+```bash
+pip install streams.messagehub
+
 ```
 Communcation with REDIS to monitor realtime.
 ```bash
 pip install redis 
 ```
 
+## Package hints.
+To check for the latest version of a package. 
+```bash
+# list all the modlules.
+pip install streamx==*
+```
+
+To upgrade to a specfic version of a package. 
+```bash
+pip3 install --upgrade streamsx==1.11.3a0
+```
+
+
 ## Requirement
+
+
 ### Create Streams Instance
 
 ## Python
