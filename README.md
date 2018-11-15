@@ -18,11 +18,17 @@ pip install redis
 ### Create Streams Instance
 
 ## Python
+- SmokeTestEKG.py : SmokeTest for all the components. Sends EGK data at 1sec intervals. 
  
 ## Testing 
 
 ## Simulation 
 Format of the data.
+### Ship Data
+- loc (lat,lng)
+- ts 
+- ship# 
+
 ### Reefer data : 
 - temp (F)
 - loc (lat,lng)
