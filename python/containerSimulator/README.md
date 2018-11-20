@@ -5,20 +5,36 @@ independently usng
 
 **TODO** : generate events into Streams
 
-## Moldules 
- - simpy
+## Modules 
+ - pip install simpy
+ 
+ 
  
 ## Learning
  - [video](https://www.youtube.com/watch?v=Bk91DoAEcjY) SimPy introduction
  - [basic](https://simpy.readthedocs.io/en/latest/contents.html) : note the realtime simulations
  - [refrigerator](https://pythonhosted.org/SimPy/Manuals/Interfacing/ParallelSimPy/SimPyPP.html) : simulator derived from here
  
+
  
- ### Files
+### Files
  - containersFile.py : generate container tracks into json file.
  - latlondata.csv : track data India - India to Sigapore 
+ - jsonPlayback.py : playback json file as stream, 
   
-  
+
+**containersFile.py : Will build the .json file that is consumed 
+byt jsonPlayer.py
+
+**jsonPlayback.py** default sends reeferTrack.json that has 10 reefers 
+sending out updates every .2 seconds taking. At this rate it will
+date 5 days to exahust the data which is how long I think I have
+the ship to travel. 
+
+Stop gap working toward a better simulator. 
+- messageHub : jsonFile 
+
+
 ### Sample data from run of containersFile.csv
 ```text
 {
@@ -46,3 +62,4 @@ independently usng
     "amp": 0.0
   },
 ```
+
