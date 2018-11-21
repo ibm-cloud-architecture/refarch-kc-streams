@@ -190,7 +190,7 @@ if __name__ == '__main__':
 
 
     parser = argparse.ArgumentParser(description='Generate gps track for reefer containers')
-    parser.add_argument('--gpsFile', help="csv file with headers:Longitude,Latitude,Altitude", default="latlondata.csv")
+    parser.add_argument('--gpsFile', help="csv file with headers:Longitude,Latitude,Altitude", default="../data/latlondata.csv")
     parser.add_argument('--tempuratureHourly', help="hourly temp with header:date, tempC", default="../data/weatherJunNY.csv")
     parser.add_argument('--outFile', help="output of gps track json file ", default="reeferTrack.json")
     parser.add_argument('--reefers', help="number of reefers to generate", default="10")
