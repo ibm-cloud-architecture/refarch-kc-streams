@@ -1,7 +1,9 @@
 # Conatainers on Ship Simulator : Shipping Containers crossing Bluewater 
 
 Using simpy to generate a set of reefer containers moving over bluewater. The reefers temp is generated 
-independently usng
+independently for each container. The temp of the container is dependent on the
+power(amp), insulation and outside temp. The outside temp is determined by 
+a file that has hourly tempuratures. 
 
 **TODO** : generate events into Streams
 
@@ -23,8 +25,8 @@ independently usng
  - jsonPlayback.py : playback json file as stream, 
   
 
-**containersFile.py : Will build the .json file that is consumed 
-byt jsonPlayer.py
+**containersFile.py : Build the .json file that is consumed 
+byt jsonPlayer.py. 
 
 **jsonPlayback.py** default sends reeferTrack.json that has 10 reefers 
 sending out updates every .2 seconds taking. At this rate it will
@@ -34,32 +36,20 @@ the ship to travel.
 Stop gap working toward a better simulator. 
 - messageHub : jsonFile 
 
+# Simulation Notes.
 
-### Sample data from run of containersFile.csv
-```text
-{
-    "tempC": 2.16743565494168,
-    "id": "Reefer_0",
-    "ts": "2018-01-03 11:52:00",
-    "latitude": 6.534462003,
-    "longitude": 91.93153381,
-    "amp": 55.467900564943385
-  },
-  {
-    "tempC": 2.5343135699964074,
-    "id": "Reefer_1",
-    "ts": "2018-01-03 11:52:00",
-    "latitude": 6.534462003,
-    "longitude": 91.93153381,
-    "amp": 52.10202347975249
-  },
-  {
-    "tempC": 10.164932490533113,
-    "id": "Reefer_2",
-    "ts": "2018-01-03 11:52:00",
-    "latitude": 6.534462003,
-    "longitude": 91.93153381,
-    "amp": 0.0
-  },
-```
+Currently the outside temp is determined by an hourly weather file that is 
+passed to the containterFile.py. The plot below is partial plot of the 
+simulation output. 
+
+![](ampTempOutsideTemp.jpg)
+
+Amps are the amount energy the unit is consuming to cool the unit. If the amp 
+are up, the motor is on 'duty'.
+As the temp. goes up the duty cycle goes up.  When the outside temp drops, 
+the duty cycle drops as the average temp of the unit.  
+
+
+
+ 
 

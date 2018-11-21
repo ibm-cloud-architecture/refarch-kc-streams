@@ -1,10 +1,22 @@
 # coding=utf8
 """
-Reefer simulation....
+containerSimulation.py : Generate a number of refrigerated containers (Reefer Units) transorted
+on ship. The reefers has a operating range, values that effect this units are the outside temp,
+number of amps used in a cooling phase.
+
+Outside temp. is  influenced by:
+     weather :  implemented
+     container location : todo - close to the equator, higher the temp.
+     time of day : todo : closer to noon, higher the temp.
+
+
+Output :
+  file :
+  stream / message hub : todo
 
 @author: Stefan Scherfke
 @contact: stefan.scherfke at uni-oldenburg.de
-@hacked: mags
+@adapted : mags
 """
 
 from math import exp
@@ -14,16 +26,13 @@ import random
 import csv
 import json
 from datetime import datetime, timedelta
-from typing import Dict
 import argparse
-
-
 import simpy
 
 log = logging.getLogger('reefer')
 
 
-class Fridge(object):
+class Reefer(object):
     """
     This class represents a simulated fridge.
     It's temperature T for and equidistant series of time steps is computed by
@@ -32,10 +41,11 @@ class Fridge(object):
 
     Added elements:
     - fetchLoc : function that returns the current lat,lng based upon id passed in
+    - locationTemp :
     - id : String to identify the reefer.
     """
 
-    def __init__(self, env, id="R1", fetchLoc=None, reeferLog=None, T_O=20.0, A=3.21, m_c=15.97, tau=1.0 ,
+    def __init__(self, env, id="R1", fetchLoc=None, reeferLog=None, locationTemp=None,  T_O=20.0, A=3.21, m_c=15.97, tau=1.0 ,
                  eta=3.0, q_i=0.0, q_max=70.0,
                  T_i=5.0, T_range=[5.0, 8.0], noise=False):
         """
@@ -45,6 +55,7 @@ class Fridge(object):
         @type sim:        SimPy.Simulation
         @parm id:         Reefer id
         @func fetchLoc    Fetch the current location based upon step
+        @func locationTemp Return the outside temp based upon the current location.
         @param T_O:       Outside temperature
         @param A:         Insulation
         @param m_c:       Thermal mass/thermal storage capacity
@@ -61,6 +72,7 @@ class Fridge(object):
         self.id = id
         self.fetchLoc = fetchLoc
         self.reeferLog = reeferLog
+        self.locationTemp = locationTemp
         self.T_O = T_O
         self.A = A
         self.m_c = random.normalvariate(20, 4.5) if noise else m_c
@@ -78,6 +90,9 @@ class Fridge(object):
         Calculate the fridge's temperature for the current time step.
         """
         while True:
+            locTs = self.fetchLoc(self.env.now)
+            self.T_O = self.locationTemp(locTs)
+
             epsilon = exp(-(self.tau * self.A) / self.m_c)
             self.T_i = epsilon * self.T_i + (1 - epsilon) \
                        * (self.T_O - self.eta * (self.q_i / self.A))
@@ -87,10 +102,10 @@ class Fridge(object):
                 self.q_i = random.uniform(self.q_max * 0.60, self.q_max )
             elif self.T_i <= self.T_range[0]:
                 self.q_i = 0.0  # Stop cooling
-            locTs = self.fetchLoc(self.env.now)
-            logEntry = {'id': self.id, 'tempC': self.T_i, 'amp': last_qi, 'latitude': locTs['latitude'], 'longitude':locTs['longitude'], 'ts':locTs['ts']}
+
+            logEntry = {'id': self.id, 'tempC': self.T_i, 'amp': last_qi, 'latitude': locTs['latitude'], 'longitude':locTs['longitude'], 'ts':locTs['ts'], 'oTemp':self.T_O}
             self.reeferLog(logEntry)
-            log.debug('{"id":"%s","Temp°C":%2.2f,"amp":%2.2f "loc":%s},'% (self.id, self.T_i, last_qi, locTs))
+            log.debug('{"id":"%s","Temp°C":%2.2f,"amp":%2.2f "loc":%s oTemp:%d},'% (self.id, self.T_i, last_qi, locTs, self.T_O))
 
             yield self.env.timeout(self.tau)
 
@@ -99,6 +114,7 @@ class Fridge(object):
         This is a over ride function.
         """
         self.q_i = self.q_max
+
 
 
 class ReeferLog(object):
@@ -116,19 +132,42 @@ class ReeferLog(object):
         return self.reeferLog
 
 
+class LocationTemp():
+    """
+    Hourly temp file, each line number within the file is the hours temp.
+
+    If line 49 is -20 then the outside temp is will be -20 on
+    the 2 days and 1 hour after the start of the vouage.
+
+    File is expected to be csv, with two columns date and tempC
+    a header
+    """
+    def __init__(self, hourlyTempFile="../data/weatherJanNY.csv",
+                 startTime="2018-1-1 00:00:00"):
+        with open(hourlyTempFile) as csvfile:
+            data = csv.reader(csvfile, delimiter="|")
+            next(data, None)     # skip header
+            hourTemps = [row[1] for row in data]
+        self.hourTemps = hourTemps
+        self.startHour = datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")
+
+    def __call__(self, dict):
+        endHour = datetime.strptime(dict['ts'], "%Y-%m-%d %H:%M:%S")
+        diff = endHour - self.startHour
+        days, seconds = diff.days, diff.seconds
+        hour  = days*24 + seconds //3600
+        return(float(self.hourTemps[hour]))
+
 
 class ShipTrack(object):
-    def __init__(self, csvFile, sampleIncrement=120, startTime=None):
+    def __init__(self, csvFile, sampleIncrement=120, startTime="2018-01-01 00:00:00"):
         """
         :param csvFile: file with gps data
         :param sampleIncrement: number of seconds between element
-        :param startTime: when clock is to start, None: the begining of 2018
+        :param startTime: when clock is to start
         """
         self.gpsTrack = list()
-        if startTime is not None:
-            self.startTime = startTime
-        else:
-            self.startTime = datetime(2018, 1, 1, hour=0, minute=0, second=0, microsecond=0)
+        self.startTime = datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")
 
         self.secs = sampleIncrement
         with open(csvFile) as csvfile:
@@ -151,7 +190,8 @@ if __name__ == '__main__':
 
 
     parser = argparse.ArgumentParser(description='Generate gps track for reefer containers')
-    parser.add_argument('--gpsFile', help="csv file with headers (Longitude,Latitude,Altitude)", default="latlondata.csv")
+    parser.add_argument('--gpsFile', help="csv file with headers:Longitude,Latitude,Altitude", default="latlondata.csv")
+    parser.add_argument('--tempuratureHourly', help="hourly temp with header:date, tempC", default="../data/weatherJunNY.csv")
     parser.add_argument('--outFile', help="output of gps track json file ", default="reeferTrack.json")
     parser.add_argument('--reefers', help="number of reefers to generate", default="10")
     parser.add_argument('--startTime', help="start time", default=datetime(2018, 1, 1, hour=0, minute=0, second=0, microsecond=0)
@@ -169,6 +209,7 @@ if __name__ == '__main__':
     trackLength  = shipTrack.length() - 20
 
     reeferLog = ReeferLog()
+    locationTemp = LocationTemp(args.tempuratureHourly)
     reefer = list()
     tau = 1. / 60  # Step size 1min
     aggSteps = 15  # Aggregate consumption in 15min blocks
@@ -178,8 +219,10 @@ if __name__ == '__main__':
 
     for idx in range(int(args.reefers)):
         reeferId = "Reefer_%d" % idx
-        reefer.append(Fridge(sim, id=reeferId, fetchLoc=shipTrack, reeferLog=reeferLog))
+        reefer.append(Reefer(sim, id=reeferId, fetchLoc=shipTrack, reeferLog=reeferLog, locationTemp=locationTemp))
     sim.run(until=trackLength)
     ## write out results state in shipTrack
     with open(args.outFile, 'w') as outfile:
         json.dump(reeferLog.fetch(), outfile, indent=2)
+
+
