@@ -21,11 +21,11 @@ a file that has hourly tempuratures.
  
 ### Files
  - containersFile.py : generate container tracks into json file.
- - latlondata.csv : track data India - India to Sigapore 
- - jsonPlayback.py : playback json file as stream, 
+ - jsonPlayback.py : playback json file as stream,
+ - reeferTrack.json : exmample simulation output 
   
 
-**containersFile.py : Build the .json file that is consumed 
+**containersFile.py** : Build the .json file that is consumed 
 byt jsonPlayer.py. 
 
 **jsonPlayback.py** default sends reeferTrack.json that has 10 reefers 
@@ -49,7 +49,7 @@ are up, the motor is on 'duty'.
 As the temp. goes up the duty cycle goes up.  When the outside temp drops, 
 the duty cycle drops as the average temp of the unit.  
 
-
+TODO * more track data files in BOX.
 
  
 
