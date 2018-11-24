@@ -5,11 +5,8 @@ independently for each container. The temp of the container is dependent on the
 power(amp), insulation and outside temp. The outside temp is determined by 
 a file that has hourly tempuratures. 
 
-**TODO** : generate events into Streams
-
 ## Modules 
  - pip install simpy
- 
  
  
 ## Learning
