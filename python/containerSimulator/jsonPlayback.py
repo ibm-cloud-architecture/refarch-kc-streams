@@ -36,7 +36,7 @@ class FileFeed(object):
     def __enter__(self):
         fullFilePath = os.path.join(streamsx.ec.get_application_directory(), 'etc', self.filename)
         self.data = read_data(fullFilePath)
-        self.datalen =  len(self.data)
+        self.datalen = len(self.data)
         self.idx = 0
 
     def __exit__(self):
@@ -44,7 +44,7 @@ class FileFeed(object):
         pass
 
     def __next__(self):
-        if (self.idx  >= self.datalen):
+        if self.idx >= self.datalen:
             ts = time.time()
             print("Resetting index @ ", datetime.datetime.fromtimestamp(ts).isoformat() )
             self.idx = 0
@@ -52,7 +52,6 @@ class FileFeed(object):
         self.idx += 1
         time.sleep(self.waitPeriod)
         return(chunk)
-
 
 
 def jsonFileHub(jobName, nameSpace, mhTopic, jsonDataPath):
@@ -64,14 +63,14 @@ def jsonFileHub(jobName, nameSpace, mhTopic, jsonDataPath):
     print(jsonDataFile)
 
     allEvents = topo.source(FileFeed(filename=jsonDataFile))
-    reefer5dict = allEvents.filter(lambda t: t['id']=='Reefer_5', name="filterReefer_5")
+    reefer5dict = allEvents.filter(lambda t: t['id'] == 'Reefer_5', name="filterReefer_5")
     # convert to tuple + drop fields
     reefer5tuple = reefer5dict.map(lambda t: t, schema='tuple<float32 tempC, int32 amp>')
     # tuples plot in the console.
     reefer5tuple.view(buffer_time=2.0, sample_size=50, name="viewReefer5")
 
     # Send to message hub.
-    allEvents = allEvents.as_string()
+    allEvents = allEvents.as_json(name="toJson")
     messagehub.publish(allEvents, topic=mhTopic)
     return topo
 
@@ -88,7 +87,7 @@ if __name__ == '__main__':
     parser.add_argument('--jobName', help="Name to assign to the job name", default=defJobName)
     parser.add_argument('--nameSpace', help="Name to assign to the namespace", default=defJobName)
     parser.add_argument('--cancel', help="Cancel active job before submitting job, uses jobName, nameSpace", default=True)
-    ## application specfic arguments...
+    # application specfic arguments...
     parser.add_argument('--mhTopic', help="MessageHub topic to to send ekg events out on.", default="jsonEvents")
     parser.add_argument('--jsonData', help="Json data file, list of records to push ", default="reeferTrack.json")
 
