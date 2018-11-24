@@ -27,7 +27,7 @@ from pathlib import Path
 import time
 import datetime
 import argparse
-
+from resourceAccess import TransmitRedis
 
 class exampleMap(object):
     def __init__(self, valvar):
@@ -53,6 +53,7 @@ def monitor(jobName, nameSpace, mhTopic, jsonDataPath):
     filterTest = examMap.filter(lambda t: t['id'].startswith("Reefer_"), name="filterTest")
     filterLambda = filterTest.filter(lambda t: t['id'] is not None, name="anaTest")
     mapLambda = filterLambda.map(lambda t: dict((k, t[k]) for k in ("id", "oTemp")))
+    mapLambda.sink(TransmitRedis(credentials=credential.redisCredential, destKey="/score/control"))
     return topo
 
 
