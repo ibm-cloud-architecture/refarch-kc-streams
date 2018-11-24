@@ -3,12 +3,21 @@
 ## Prerequisite : 
 Python3 prefer Anaconda 
 
-TODO * link to the streamsx page
+ **TODO** * link to Streams
+ **TODO** * link to topology toolkit
+ - Streams Documentation
+ - [streamsx documentation](https://pypi.org/search/?q=streamsx)
+ - Toolkits 
+ - [IBM Streams documentation](http://ibmstreams.github.io/streamsx.documentation/) 
+ - [IBM Streams Python Support](https://streamsxtopology.readthedocs.io/en/latest/index.html)
+ - [Streams Python tutorial](https://developer.ibm.com/courses/all/streaming-analytics-basics-python-developers/) 
+ 
+ 
 ## Packages   
 
 Streams package that supports building stream 
 ```bash
-pip install streamsx 
+pip install streamsx
 ```
 Install the messagehub support
 ```bash
@@ -18,6 +27,11 @@ Communication with REDIS to monitor real time.
 ```bash
 pip install redis 
 ```
+ ## Contents roots
+ - python/shared/creds
+ - python/shared
+ - python/containerSimulator
+ 
 
 ## Package hints.
 To check for the latest version of a package. 
