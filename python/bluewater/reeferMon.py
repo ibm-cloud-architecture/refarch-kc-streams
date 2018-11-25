@@ -7,6 +7,7 @@ Monitor shipboard reefers (refrigerated containers) traveling over blue water.
 *****
 NOTES
 *****
+- Pushing data to redis in order that something viewport into the processing.
 
 
 """
@@ -37,23 +38,25 @@ class exampleMap(object):
         print("type:", type(dict))
         print("data:", dict)
         return dict
+
 """
 Sample record
 type: <class 'dict'>
 data: {'id': 'Reefer_5', 'ts': '2018-01-01 21:44:00', 'oTemp': 22.1, 'latitude': 10.11291508, 'longitude': 83.09646606, 'amp': 55.730234304187434, 'tempC': 1.974183120145919}
 """
 
-def monitor(jobName, nameSpace, mhTopic, jsonDataPath):
+
+
+def monitor(jobName, nameSpace, mhTopic, redisBase=None):
     topo = Topology(jobName, nameSpace)
 
     from_mh = messagehub.subscribe(topo, schema=CommonSchema.Json, topic=mhTopic)
-
 
     examMap = from_mh.map(exampleMap(valvar=10), name="examMap")
     filterTest = examMap.filter(lambda t: t['id'].startswith("Reefer_"), name="filterTest")
     filterLambda = filterTest.filter(lambda t: t['id'] is not None, name="anaTest")
     mapLambda = filterLambda.map(lambda t: dict((k, t[k]) for k in ("id", "oTemp")))
-    mapLambda.sink(TransmitRedis(credentials=credential.redisCredential, destKey="/score/control"))
+    mapLambda.sink(TransmitRedis(credentials=credential.redisCredential, destKey=redisBase + "/bluewater", chunkCount=10))
     return topo
 
 
@@ -71,11 +74,12 @@ if __name__ == '__main__':
     parser.add_argument('--cancel', help="Cancel active job before submitting job, uses jobName, nameSpace", default=True)
     ## application specfic arguments...
     parser.add_argument('--mhTopic', help="MessageHub topic to to send ekg events out on.", default="jsonEvents")
-    parser.add_argument('--jsonData', help="Json data file, list of records to push ", default="../containerSimulator/reeferTrack.json")
+    parser.add_argument('--redisBase', help="Redis monitor path base path.", default="/score")
 
     args = parser.parse_args()
 
-    topo = monitor(jobName=args.jobName, nameSpace=args.nameSpace, mhTopic=args.mhTopic, jsonDataPath=args.jsonData)
+    topo = monitor(jobName=args.jobName, nameSpace=args.nameSpace,
+                   mhTopic=args.mhTopic, redisBase=args.redisBase)
 
     try:
         import creds.credential as creds

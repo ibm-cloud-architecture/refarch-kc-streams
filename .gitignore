@@ -116,3 +116,4 @@ venv.bak/
 /python/shared/creds/credential.py
 /python/shared/creds/credential.py.zip
 /python/*.zip
+/python/shared/creds/vcap.json
