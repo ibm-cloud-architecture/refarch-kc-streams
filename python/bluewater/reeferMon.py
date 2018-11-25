@@ -50,7 +50,7 @@ def monitor(job_name, name_space, mh_topic, redis_base=None):
     filterLambda = filterTest.filter(lambda t: t['id'] is not None, name="anaTest")
     # mapLambda = filterLambda.map(lambda t: dict((k, t[k]) for k in ("id", "oTemp")))
     filterLambda.sink(TransmitRedis(credentials=credential.redisCredential,
-                                     dest_key=redis_base + "/bluewater", chunk_count=1000))
+                                     dest_key=redis_base + "/bluewater", chunk_count=10000))
     return topo
 
 
