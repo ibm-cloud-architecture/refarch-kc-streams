@@ -1,14 +1,26 @@
+"""
+Streams Application * Simulate a containers' on a ships based data files.
+ -
+
+The data is pushed out messagehub.
+
+
+"""
+
 import common
-import credential
 
-from streamsx.topology.topology import *
-from streamsx.topology.schema import *
-import streamsx.messagehub as messagehub
 from pathlib import Path
-
 import time
 import datetime
 import argparse
+
+import streamsx.messagehub as messagehub
+
+import credential
+from streamsx.topology.topology import *
+from streamsx.topology.schema import *
+
+
 
 
 def read_data(input_file):
@@ -54,7 +66,7 @@ class FileFeed(object):
         return(chunk)
 
 
-def jsonFileHub(jobName, nameSpace, mhTopic, jsonDataPath):
+def jsonFileHub(jobName, nameSpace, mhTopic, jsonDataPath, message_wait):
     topo = Topology(jobName, nameSpace)
 
     # Add the file to the sab so it will be in etc when deployed
@@ -62,7 +74,7 @@ def jsonFileHub(jobName, nameSpace, mhTopic, jsonDataPath):
     jsonDataFile = os.path.basename(jsonDataPath)
     print(jsonDataFile)
 
-    allEvents = topo.source(FileFeed(filename=jsonDataFile))
+    allEvents = topo.source(FileFeed(filename=jsonDataFile, intermessageWait=message_wait))
     reefer5dict = allEvents.filter(lambda t: t['id'] == 'Reefer_5', name="filterReefer_5")
     # convert to tuple + drop fields
     reefer5tuple = reefer5dict.map(lambda t: t, schema='tuple<float32 tempC, int32 amp>')
@@ -90,9 +102,13 @@ if __name__ == '__main__':
     # application specfic arguments...
     parser.add_argument('--mhTopic', help="MessageHub topic to to send ekg events out on.", default="jsonEvents")
     parser.add_argument('--jsonData', help="Json data file, list of records to push ", default="reeferTrack.json")
+    parser.add_argument('--messageWait', help="Subsecond time to wait between transmitting data", default="0.2")
 
     args = parser.parse_args()
-    topo = jsonFileHub(jobName=args.jobName, nameSpace=args.nameSpace, mhTopic=args.mhTopic, jsonDataPath=args.jsonData)
+    topo = jsonFileHub(jobName=args.jobName, nameSpace=args.nameSpace,
+                       mhTopic=args.mhTopic,
+                       jsonDataPath=args.jsonData,
+                       message_wait=float(args.messageWait))
 
     try:
         import creds.credential as creds
@@ -104,7 +120,7 @@ if __name__ == '__main__':
           buildType=args.buildType,
           serviceType=args.serviceType,
           jobName=args.jobName,
-          cancel=args.cancel, )
+          cancel=args.cancel )
     print("Process status:%s" % submitStatus)
 
 
