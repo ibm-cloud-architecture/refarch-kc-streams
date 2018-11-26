@@ -105,6 +105,7 @@ if __name__ == '__main__':
     parser.add_argument('--messageWait', help="Subsecond time to wait between transmitting data", default="0.2")
 
     args = parser.parse_args()
+    print("resolved args:", args)
     topo = jsonFileHub(jobName=args.jobName, nameSpace=args.nameSpace,
                        mhTopic=args.mhTopic,
                        jsonDataPath=args.jsonData,
