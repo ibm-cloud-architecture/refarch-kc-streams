@@ -61,15 +61,26 @@ class ExampleMap(object):
         print("data:", dct)
         return dct
 
+class TagTuple(object):
+    def __init__(self, tag):
+        self.tag = tag
+    def __call__(self, in_dict):
+        in_dict['tag'] = self.tag
+        print(in_dict)
+        return in_dict
 
 def monitor(job_name, name_space, mh_topic, redis_base=None):
     topo = Topology(job_name, name_space)
     topo.add_pip_package('streamsx.messagehub')
 
     shipMh = streamsx.messagehub.subscribe(topo, schema=CommonSchema.Json, topic="bluewaterShip", name="shipMH")
+    shipMh = shipMh.map(TagTuple("ship"))
     shipData = shipMh.filter(lambda t: t is not None , name="shipData")
 
-    containerMh = streamsx.messagehub.subscribe(topo, schema=CommonSchema.Json, topic="bluewaterContainer", name="containerMH")
+    containerMh = streamsx.messagehub.subscribe(topo, schema=CommonSchema.Json, topic="bluewaterContainer",
+                                                name="containerMH")
+    containerMh = containerMh.map(TagTuple("container"))
+
 
     complete = containerMh.map(augment_weather, name="weatherAugment")
 
@@ -97,7 +108,7 @@ if __name__ == '__main__':
     parser.add_argument('--jobName', help="Name to assign to the job name", default=defJobName)
     parser.add_argument('--nameSpace', help="Name to assign to the namespace", default=defJobName)
     parser.add_argument('--cancel', help="Cancel active job before submitting job, uses jobName, nameSpace",
-                        default=True)
+                        default=False)
     # application specfic arguments...
     parser.add_argument('--mhTopic', help="MessageHub topic to to send ekg events out on.", default="jsonEvents")
     parser.add_argument('--redisBase', help="Redis monitor path base path.", default="/score")
