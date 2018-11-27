@@ -1,19 +1,21 @@
 # Streams Application using 
 
-## Prerequisite : 
-Python3 prefer Anaconda 
-
- **TODO** * link to Streams
- **TODO** * link to topology toolkit
- - Streams Documentation
+## Information Links.
+ - [Developing IMG Streams Applications with Phython](http://ibmstreams.github.io/streamsx.documentation/docs/python/1.6/python-appapi-devguide/index.html)
+-  [Streams Python tutorial](https://developer.ibm.com/courses/all/streaming-analytics-basics-python-developers/)  
  - [streamsx documentation](https://pypi.org/search/?q=streamsx)
- - Toolkits 
  - [IBM Streams documentation](http://ibmstreams.github.io/streamsx.documentation/) 
  - [IBM Streams Python Support](https://streamsxtopology.readthedocs.io/en/latest/index.html)
- - [Streams Python tutorial](https://developer.ibm.com/courses/all/streaming-analytics-basics-python-developers/) 
+
+
+## Prerequisite : 
+
+Currently Python3.5, I'm have bias of the [Anaconda](https://www.anaconda.com/) distribution, for it's completness.
+
  
  
-## Packages   
+ 
+### Packages   
 
 Streams package that supports building stream 
 ```bash
@@ -56,19 +58,7 @@ pip3 install --upgrade streamsx==1.11.3a0
  
 ## Testing 
 
-## Simulation 
-Format of the data.
-### Ship Data
-- loc (lat,lng)
-- ts 
-- ship# 
-
-### Reefer data : 
-- temp (F)
-- loc (lat,lng)
-- power 
-- ts 
-- unit #
+   
 
 ### Ship location
 - [short location ](https://www.navcen.uscg.gov/?pageName=AISMessagesA)

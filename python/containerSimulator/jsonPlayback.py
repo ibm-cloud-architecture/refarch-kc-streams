@@ -1,8 +1,21 @@
 """
-Streams Application * Simulate a containers' on a ships based data files.
- -
+Streams Application * Simulate a containers' and ships.
 
-The data is pushed out messagehub.
+Data pushed across onto message hub.
+
+The data file records that look like:
+ {
+    "tempC": 8.381110706248602,
+    "amp": 0.0,
+    "latitude": 5.096282982,
+    "id": "Reefer_6",
+    "oTemp": 17.8,
+    "ts": "2018-01-04 01:54:00",
+    "longitude": 95.16426085
+  },
+
+ Split these into two separate MH streams:
+
 
 
 """
@@ -65,25 +78,38 @@ class FileFeed(object):
         time.sleep(self.waitPeriod)
         return(chunk)
 
+def shipData(iDict):
+    nDict = dict(iDict)
+    nDict['shipId'] = "medusa"
+    [nDict.pop(k, None) for k in ('amp', 'tempC', 'oTemp', 'id')]
+    return nDict
 
-def jsonFileHub(jobName, nameSpace, mhTopic, jsonDataPath, message_wait):
+def containerData(iDict):
+    nDict = dict(iDict)
+    nDict['shipId'] = "medusa"
+    nDict['containerId'] = iDict['id']
+    [nDict.pop(k, None) for k in ('latitude','longitude','id','oTemp')]
+    return nDict
+
+
+
+def json2FileHub(jobName, nameSpace, mhTopic, jsonDataPath, message_wait):
     topo = Topology(jobName, nameSpace)
 
     # Add the file to the sab so it will be in etc when deployed
     topo.add_file_dependency(jsonDataPath, "etc")
     jsonDataFile = os.path.basename(jsonDataPath)
     print(jsonDataFile)
-
     allEvents = topo.source(FileFeed(filename=jsonDataFile, intermessageWait=message_wait))
-    reefer5dict = allEvents.filter(lambda t: t['id'] == 'Reefer_5', name="filterReefer_5")
-    # convert to tuple + drop fields
-    reefer5tuple = reefer5dict.map(lambda t: t, schema='tuple<float32 tempC, int32 amp>')
-    # tuples plot in the console.
-    reefer5tuple.view(buffer_time=2.0, sample_size=50, name="viewReefer5")
 
-    # Send to message hub.
-    allEvents = allEvents.as_json(name="toJson")
-    messagehub.publish(allEvents, topic=mhTopic)
+    shipStream = allEvents.map(shipData, name="shipData")
+    containerStream = allEvents.map(containerData, name="containerData")
+
+    shipJson = shipStream.as_json(name="shipJson")
+    containerJson = containerStream.as_json(name="containerJson")
+
+    messagehub.publish(shipJson, topic="bluewaterShip", name="shipMH")
+    messagehub.publish(containerJson, topic="bluewaterContainer", name="containerMH")
     return topo
 
 
@@ -106,7 +132,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     print("resolved args:", args)
-    topo = jsonFileHub(jobName=args.jobName, nameSpace=args.nameSpace,
+    topo = json2FileHub(jobName=args.jobName, nameSpace=args.nameSpace,
                        mhTopic=args.mhTopic,
                        jsonDataPath=args.jsonData,
                        message_wait=float(args.messageWait))

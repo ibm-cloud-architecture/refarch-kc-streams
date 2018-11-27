@@ -27,6 +27,28 @@ from streamsx.topology.schema import CommonSchema
 import streamsx.messagehub
 from pathlib import Path
 from resourceAccess import TransmitRedis
+from random import random
+
+
+
+
+def augment_weather(iDict):
+    # TODO use lat/long when
+    """
+    Put some weather data into the dictionary
+    :param iDict:
+    :return:
+    """
+    iDict['weatherC'] = (random() * 10) + 10
+    iDict['latitude'] = '37.7739'
+    iDict['longitude'] = '-122.431'
+    return(iDict)
+
+def format_fire(iDict):
+    iDict['severity'] = "fire"
+    iDict['issue'] = "combustion within container"
+    iDict['status'] = "active"
+    return(iDict)
 
 
 class ExampleMap(object):
@@ -44,14 +66,21 @@ def monitor(job_name, name_space, mh_topic, redis_base=None):
     topo = Topology(job_name, name_space)
     topo.add_pip_package('streamsx.messagehub')
 
-    fromMh = streamsx.messagehub.subscribe(topo, schema=CommonSchema.Json, topic=mh_topic)
+    shipMh = streamsx.messagehub.subscribe(topo, schema=CommonSchema.Json, topic="bluewaterShip", name="shipMH")
+    shipData = shipMh.filter(lambda t: t is not None , name="shipData")
 
-    exampleMap = fromMh.map(ExampleMap(val_var=10), name="examMap")
-    filterTest = exampleMap.filter(lambda t: t['id'].startswith("Reefer_"), name="filterTest")
-    filterLambda = filterTest.filter(lambda t: t['id'] is not None, name="anaTest")
-    # mapLambda = filterLambda.map(lambda t: dict((k, t[k]) for k in ("id", "oTemp")))
-    filterLambda.sink(TransmitRedis(credentials=credential.redisCredential,
-                                     dest_key=redis_base + "/bluewater", chunk_count=10000))
+    containerMh = streamsx.messagehub.subscribe(topo, schema=CommonSchema.Json, topic="bluewaterContainer", name="containerMH")
+
+    complete = containerMh.map(augment_weather, name="weatherAugment")
+
+    filterFire = complete.filter(lambda t: t['tempC'] > 200.0 , name="fireTest")
+    formatFire = filterFire.map(format_fire, name="fireFormat")
+
+    messageFire = formatFire.sink(TransmitRedis(credentials=credential.redisCredential,
+                                     dest_key=redis_base + "/bluewater/fire", chunk_count=100), name="fireRedis")
+
+    messageFire = formatFire.as_json(name="fireJson")
+    streamsx.messagehub.publish(messageFire, topic="bluewaterProblem", name="problemMH")
     return topo
 
 
