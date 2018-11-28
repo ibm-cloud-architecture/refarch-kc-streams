@@ -1,6 +1,6 @@
 # KC Scenario - BlueWater Phase
 
-Once the ship departs port, there are a series of user stories around understanding and managing container health while in transit 
+Once the ship departs port, there are a series of user stories around understanding and managing container health while in transit.
 
 **Key Role:**
 **_Shipping Agent:_**
@@ -12,7 +12,7 @@ Once the ship departs port, there are a series of user stories around understand
         * As a Shipping Agent, I’d like to understand when a container is failing so I can take corrective action
         * As a Shipping Agent, I’d like to automatically manage container settings based on any course or route deviations or rerouting events
 
-## Policies:
+## Policies
 
 1. Temp is rising && no power consumption  ==> reset power and thermostat
 2. Temp is rising && power consumption is flat ==> Potential Failure -> reset & notify
