@@ -30,14 +30,20 @@ sending out updates every .2 seconds taking. At this rate it will
 date 5 days to exahust the data which is how long I think I have
 the ship to travel. 
 
-Stop gap working toward a better simulator. 
+This is the first simulator, Jerome has created his own so this will die. 
+
+Updated to generate data on two MH topics: bluewaterShip, bluewaterContainer. 
+This is hacky 
+
+SimultorRun.sh invokes the jsonPlayback.py with fire data. 
+ 
 - messageHub : jsonFile 
 
 # Simulation Notes.
-
-Currently the outside temp is determined by an hourly weather file that is 
+The outside temp needs to come from the weather co.
+~~Currently the outside temp is determined by an hourly weather file that is 
 passed to the containterFile.py. The plot below is partial plot of the 
-simulation output. 
+simulation output.~~
 
 ![](ampTempOutsideTemp.jpg)
 

@@ -3,7 +3,7 @@ from streamsx.topology import context
 import zipfile
 import os
 from streamsx.rest import *
-import credential
+import creds.credential as credential
 
 
 """

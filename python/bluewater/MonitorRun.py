@@ -9,6 +9,8 @@ NOTES
 *****
 
 """
+import sys
+print("current syspath", sys.path)
 import common
 import argparse
 from pathlib import Path

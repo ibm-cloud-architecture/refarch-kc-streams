@@ -8,8 +8,15 @@ Processes tuples arriving via MessageHub
 Submits the reefer jobs
 
 ### reeferMon.py
-Recieves tuples and pushes them to Redis, the redis.ipynb notebook
-will graph the values. 
+Submit a job to the build server if it finishes successfully the job is submitted to Streaming Analatics Streaming3Turbine. 
+Messages come in bluewaterShip & bluewaterContainer - when a notification needs to happen it goes out bluewaterProblem.
+
+Use ReeferMonRun.sh to run from the command line. 
+ 
+
+
+##
+
 
 ### reeferRange.py 
 Based upon threashold file values are filtered an averaged.   
@@ -29,7 +36,7 @@ Will drive the tests when I work out issues with the test harness.
 },
 ```
 
-### topic: bluewaterShip
+### topic: bluewaterContainer
 ```json
 {
     "shipId": "medusa",
