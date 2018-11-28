@@ -32,6 +32,7 @@ import streamsx.messagehub as messagehub
 import credential
 from streamsx.topology.topology import *
 from streamsx.topology.schema import *
+import streamsx.ec
 
 
 
@@ -64,9 +65,10 @@ class FileFeed(object):
         self.datalen = len(self.data)
         self.idx = 0
 
-    def __exit__(self):
+    def __exit__(self, exc_type, exc_value, traceback):
         """required if you have __enter__()"""
         pass
+
 
     def __next__(self):
         if self.idx >= self.datalen:
