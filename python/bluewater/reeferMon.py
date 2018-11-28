@@ -40,8 +40,6 @@ def augment_weather(iDict):
     :return:
     """
     iDict['weatherC'] = (random() * 10) + 10
-    iDict['latitude'] = '37.7739'
-    iDict['longitude'] = '-122.431'
     return(iDict)
 
 def format_fire(iDict):
@@ -51,47 +49,66 @@ def format_fire(iDict):
     return(iDict)
 
 
-class ExampleMap(object):
-    def __init__(self, val_var):
-        self.valvar = val_var
-        pass
-
-    def __call__(self, dct):
-        print("type:", type(dct))
-        print("data:", dct)
-        return dct
 
 class TagTuple(object):
     def __init__(self, tag):
         self.tag = tag
+
     def __call__(self, in_dict):
         in_dict['tag'] = self.tag
         print(in_dict)
         return in_dict
 
+
+class Consolidate(object):
+    """
+    Consolidate interleaved messages : 'ship', 'container'
+
+    'ship' messages data is stored in a dictionary, the data is not propated
+    'container' uses 'shipId' to extract the stored message data.
+    """
+
+    def __init__(self):
+        self.shipRegister = dict()
+        pass
+
+    def __call__(self, indict):
+        print("consolidate", indict)
+        if indict['tag'] == "ship":
+            self.shipRegister[indict['shipId']] = {"longitude": indict["longitude"], "latitude": indict['latitude']}
+            return None
+        # we are processing a container
+        enrich = self.shipRegister.get(indict['shipId'],{"latitude": 0.0, "longitude": 0.0})
+        indict.update(enrich)
+        return indict
+
+
+
 def monitor(job_name, name_space, mh_topic, redis_base=None):
     topo = Topology(job_name, name_space)
     topo.add_pip_package('streamsx.messagehub')
-
     shipMh = streamsx.messagehub.subscribe(topo, schema=CommonSchema.Json, topic="bluewaterShip", name="shipMH")
-    shipMh = shipMh.map(TagTuple("ship"))
-    shipData = shipMh.filter(lambda t: t is not None , name="shipData")
-
+    shipMh = shipMh.map(TagTuple("ship"), name="shipTag")
     containerMh = streamsx.messagehub.subscribe(topo, schema=CommonSchema.Json, topic="bluewaterContainer",
                                                 name="containerMH")
-    containerMh = containerMh.map(TagTuple("container"))
+    containerMh = containerMh.map(TagTuple("container"), name="containerTag")
 
 
-    complete = containerMh.map(augment_weather, name="weatherAugment")
+    interLeaved = shipMh.union({containerMh})
+
+    consolidated = interLeaved.map(Consolidate(), name="consolidate")
+
+    complete = consolidated.map(augment_weather, name="weatherAugment")
 
     filterFire = complete.filter(lambda t: t['tempC'] > 200.0 , name="fireTest")
     formatFire = filterFire.map(format_fire, name="fireFormat")
 
-    messageFire = formatFire.sink(TransmitRedis(credentials=credential.redisCredential,
+    formatFire.sink(TransmitRedis(credentials=credential.redisCredential,
                                      dest_key=redis_base + "/bluewater/fire", chunk_count=100), name="fireRedis")
 
     messageFire = formatFire.as_json(name="fireJson")
     streamsx.messagehub.publish(messageFire, topic="bluewaterProblem", name="problemMH")
+
     return topo
 
 
@@ -108,7 +125,7 @@ if __name__ == '__main__':
     parser.add_argument('--jobName', help="Name to assign to the job name", default=defJobName)
     parser.add_argument('--nameSpace', help="Name to assign to the namespace", default=defJobName)
     parser.add_argument('--cancel', help="Cancel active job before submitting job, uses jobName, nameSpace",
-                        default=False)
+                        default=True)
     # application specfic arguments...
     parser.add_argument('--mhTopic', help="MessageHub topic to to send ekg events out on.", default="jsonEvents")
     parser.add_argument('--redisBase', help="Redis monitor path base path.", default="/score")
