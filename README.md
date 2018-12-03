@@ -8,18 +8,26 @@
  - [IBM Streams Python Support](https://streamsxtopology.readthedocs.io/en/latest/index.html)
 
 
-## Prerequisite : 
+## Prerequisites
 
-Currently Python3.5, I'm have bias of the [Anaconda](https://www.anaconda.com/) distribution, for it's completness.
+Currently using Python3.5, I'm biased to the [Anaconda](https://www.anaconda.com/) distribution, for it's completness.
 
+To set up a Python 3.5 virtual environment, do the following:
+```bash
+virtualenv --python=python3.5 .venv
+source .venv/bin/activate
+python --version
+```
  
  
  
 ### Packages   
 
-Streams package that supports building stream 
+Streams package that supports building streams.  Use a specific version due to errors 
+hit with the most current level of streamsx. 
 ```bash
 pip install streamsx
+pip install --upgrade streamsx==1.11.3a0
 ```
 Install the messagehub support
 ```bash
@@ -29,7 +37,7 @@ Communication with REDIS to monitor real time.
 ```bash
 pip install redis 
 ```
- ## Contents roots
+## Contents roots
  - python/shared/creds
  - python/shared
  - python/containerSimulator
@@ -57,6 +65,11 @@ pip3 install --upgrade streamsx==1.11.3a0
 - SmokeTestEKG.py : SmokeTest for all the components. Sends EGK data at 1sec intervals. 
  
 ## Testing 
+Run the following scripts to start the simulator for data creation and the application.
+```bash
+ReeferMonRun.sh
+SimulatorRun.sh
+```
 
    
 
