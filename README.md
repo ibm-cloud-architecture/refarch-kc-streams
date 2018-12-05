@@ -1,16 +1,28 @@
-# Streams Application using 
+# K Container Shipment Use Case: IBM Streaming Analytics Application
 
-## Information Links.
- - [Developing IMG Streams Applications with Phython](http://ibmstreams.github.io/streamsx.documentation/docs/python/1.6/python-appapi-devguide/index.html)
--  [Streams Python tutorial](https://developer.ibm.com/courses/all/streaming-analytics-basics-python-developers/)  
- - [streamsx documentation](https://pypi.org/search/?q=streamsx)
- - [IBM Streams documentation](http://ibmstreams.github.io/streamsx.documentation/) 
- - [IBM Streams Python Support](https://streamsxtopology.readthedocs.io/en/latest/index.html)
+## Requirements
 
+## Application Structure
 
-## Prerequisites
+### Application Inputs
 
-Currently using Python3.5, I'm biased to the [Anaconda](https://www.anaconda.com/) distribution, for it's completness.
+### Application Outputs
+
+## Development Environment
+
+Application development can be done on any Linux system with the necessary packages installed.
+Build is performed with a cloud based service and the application execution also occurs on a 
+cloud based service.
+
+### Prerequisites
+
+The application has been written and validated with Python version 3.5, so that version is recommended
+for using this application,
+
+First, ensure that Python 3.5 is installed on your system:
+```bash
+TBD
+```
 
 To set up a Python 3.5 virtual environment, do the following:
 ```bash
@@ -18,9 +30,6 @@ virtualenv --python=python3.5 .venv
 source .venv/bin/activate
 python --version
 ```
- 
- 
- 
 ### Packages   
 
 Streams package that supports building streams.  Use a specific version due to errors 
@@ -55,10 +64,6 @@ To upgrade to a specfic version of a package.
 pip3 install --upgrade streamsx==1.11.3a0
 ```
 
-
-## Requirement
-
-
 ### Create Streams Instance
 
 ## Python
@@ -70,12 +75,17 @@ Run the following scripts to start the simulator for data creation and the appli
 ReeferMonRun.sh
 SimulatorRun.sh
 ```
-
-   
+Note: The SimulatorRun script will be depricated & removed.
 
 ### Ship location
 - [short location ](https://www.navcen.uscg.gov/?pageName=AISMessagesA)
 - [long location ](https://www.navcen.uscg.gov/?pageName=AISMessage27)
 
 
-### 
+# IBM Streaming Analytics References 
+ - [Developing IMG Streams Applications with Phython](http://ibmstreams.github.io/streamsx.documentation/docs/python/1.6/python-appapi-devguide/index.html)
+-  [Streams Python tutorial](https://developer.ibm.com/courses/all/streaming-analytics-basics-python-developers/)  
+ - [streamsx documentation](https://pypi.org/search/?q=streamsx)
+ - [IBM Streams documentation](http://ibmstreams.github.io/streamsx.documentation/) 
+ - [IBM Streams Python Support](https://streamsxtopology.readthedocs.io/en/latest/index.html)
+
