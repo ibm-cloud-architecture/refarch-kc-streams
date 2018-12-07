@@ -1,4 +1,5 @@
-# K Container Shipment Use Case: IBM Streaming Analytics Application
+# K Container Shipment Use Case:\s\s 
+IBM Streaming Analytics Application
 
 This streaming application demonstrates real time event processing applied to inputs from
 the ships and containers used in the K Container Shipment Use Case.  It is designed to monitor
@@ -9,6 +10,7 @@ the external services of the condition.
 ## Table Of Contents
 
 * [What You Will Learn](#what-you-will-learn)
+* [User Stories](#user-stories)
 * [Application](#application)
 * [Development Environment](#development-environment)
 * [IBM Cloud Streaming Analytics Instance](#ibm-cloud-streaming-analytics-instance)
@@ -21,9 +23,7 @@ the external services of the condition.
 - The steps needed to set up and manage the IBM Streaming Analytics Service on IBM Cloud.
 - How to use configure and use python for the application development. 
 
-## Application
-
-### User Stories 
+## User Stories 
 
 - [ ] As a Shipping Agent, I’d like to understand the health of and manage the operations of reefer (refrigerated) containers in transit, to ensure that I am effectively protecting goods in my care, and managing cost.
 - [ ] As a Shipping Agent, I need to understand when  a container isn’t operating within normal boundaries and automatically take corrective action.
@@ -32,7 +32,15 @@ the external services of the condition.
 - [ ] As a Shipping Agent, I’d like to understand when a container is failing so I can take corrective action.
 - [ ] As a Shipping Agent, I’d like to automatically manage container settings based on any course or route deviations or rerouting events.
 
+## Application
+
+This section provides details for the sample application, including descriptions for the five stages
+of a typical streaming application pipeline.
+
 ### Structure
+
+The following diagram shows the flow graph for the sample application.  Data is injested on the left
+side and flows through the operators to the outputs on the right.
 
 ![](streams-app.png)
 
@@ -55,7 +63,7 @@ use downstream in the application.  For this example, the following steps are ta
 - Reject late arriving data.
 - Remove and report invalid data points.
 
-### Detect, Predict, and Decide
+### Detect and Predict: Apply Rules and Models
 
 This stage is responsible for applying business logic to the stream of data.  This logic can consist of 
 simple bounds checks, complex rules, machine learning models, etc.  For the KC application we have 
@@ -63,11 +71,17 @@ initially implemented simple bounds checks, but will move to a more complex mach
 order to illustrate a more advanced application.
 
 Currently, the application includes the following simple checks: 
-1. Temp is above threshold and power consumption is above threshold ==> Failure 
+1. Container temperature is above threshold and power consumption is above threshold ==> Failure 
 
 TODO: Add more complete rules and models here.
 
-### Act
+### Decide: Filter the Results
+
+This stages takes the detection and predictive outputs of the prior stages and makes a decision
+as to whether a finding of interest has been made.  If one has, the event is propagated to the next
+stage where action is taken. 
+
+### Act: Generate Output
 
 TODO.
 
@@ -120,7 +134,7 @@ TODO: describe managing the cloud environment here.
 
 ## Build and Execute the Application
 
-The following script performs the application build and submits it to the IBM Cloud Streaming Analytics service.  Once it has been successfully run, the application will be running on the cloud watching for input events and producing output events in response on the Event Streams buses.
+The following script performs the application build and submits it to the IBM Cloud Streaming Analytics service.  Once it has been successfully run, the application will be running on the cloud waiting for input events and producing output events in response on the Event Streams buses.
 
 ```bash
 ReeferMonRun.sh
