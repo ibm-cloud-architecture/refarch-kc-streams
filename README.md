@@ -8,17 +8,24 @@ the external services of the condition.
 
 ## Table Of Contents
 
+* [What You Will Learn](#what-you-will-learn)
 * [Application](#application)
 * [Development Environment](#development-environment)
 * [IBM Cloud Streaming Analytics Instance](#ibm-cloud-streaming-analytics-instance)
 * [Build and Execute the Application](#build-and-execute-the-application)
 * [References](#references)
 
+## What You Will Learn
+- How to implement a basic application with IBM Streaming Analytics.
+- How to use business logic and machine learning models on real time data.
+- The steps needed to set up and manage the IBM Streaming Analytics Service on IBM Cloud.
+- How to use configure and use python for the application development. 
+
 ## Application
 
 ### User Stories 
 
-- [ ] As a Shipping Agent, I’d like to efficiently understand the health of and manage the operations of reefer containers in transit, to ensure that I am effectively protecting goods in my care, and managing cost.
+- [ ] As a Shipping Agent, I’d like to understand the health of and manage the operations of reefer (refrigerated) containers in transit, to ensure that I am effectively protecting goods in my care, and managing cost.
 - [ ] As a Shipping Agent, I need to understand when  a container isn’t operating within normal boundaries and automatically take corrective action.
 - [ ] As a Shipping Agent, I’d like to understand when a container temperatures are trending towards a boundary and may need a reset.
 - [ ] As a Shipping Agent, I’d like to understand when containers may have a potential failure so I can proactively take action to protect goods in transit.
@@ -29,12 +36,40 @@ the external services of the condition.
 
 ![](streams-app.png)
 
-### Logic
+### Ingest: Data Inputs
 
-1. Temp is rising && no power consumption  ==> reset power and thermostat
-2. Temp is rising && power consumption is flat ==> Potential Failure -> reset and notify
-3. Temp is rising and power is rising ==> Failing and notify
-4. Temp is dropping below bounds ==> reset thermostat
+The application takes in a continuous stream of real time data which is used to make decisions and predict possible problems.  The data enters the streaming analytics application as a tuple which includes all of the following items:
+- Measurement timestamp.
+- Ship identifier.
+- Ambient temperature of the ship.
+- Current ship location as a latitude / longitude pair.
+- Internal temperature of each container.
+- Average watt-hours of power consumption since the last measurement was taken.
+
+### Prepare: Transform the Inputs
+
+As input tuples arrive, a streaming application must examine the data and prepare it for
+use downstream in the application.  For this example, the following steps are taken:
+- Fill in missing readings with extrapolations from past data points.
+- Aggregate data into widows so that the data is smoothed and missing samples are handled.
+- Reject late arriving data.
+- Remove and report invalid data points.
+
+### Detect, Predict, and Decide
+
+This stage is responsible for applying business logic to the stream of data.  This logic can consist of 
+simple bounds checks, complex rules, machine learning models, etc.  For the KC application we have 
+initially implemented simple bounds checks, but will move to a more complex machine learning model in
+order to illustrate a more advanced application.
+
+Currently, the application includes the following simple checks: 
+1. Temp is above threshold and power consumption is above threshold ==> Failure 
+
+TODO: Add more complete rules and models here.
+
+### Act
+
+TODO.
 
 ## Development Environment
 
