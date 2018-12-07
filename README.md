@@ -1,5 +1,4 @@
-# K Container Shipment Use Case:\s\s 
-IBM Streaming Analytics Application
+# K Container Shipment Use Case: IBM Streaming Analytics Application
 
 This streaming application demonstrates real time event processing applied to inputs from
 the ships and containers used in the K Container Shipment Use Case.  It is designed to monitor
