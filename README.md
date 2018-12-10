@@ -45,7 +45,7 @@ side and flows through the operators to the outputs on the right.
 
 ### Ingest: Data Inputs
 
-The application takes in a continuous stream of real time data which is used to make decisions and predict possible problems.  The data enters the streaming analytics application as a tuple which includes all of the following items:
+The application takes in a continuous stream of real time data which is used to make decisions and predict possible problems.  The data enters the streaming analytics application as a tuple which includes following data:
 - Measurement timestamp.
 - Ship identifier.
 - Ambient temperature of the ship.
@@ -69,10 +69,15 @@ simple bounds checks, complex rules, machine learning models, etc.  For the KC a
 initially implemented simple bounds checks, but will move to a more complex machine learning model in
 order to illustrate a more advanced application.
 
-Currently, the application includes the following simple checks: 
-1. Container temperature is above threshold and power consumption is above threshold ==> Failure 
+The application has been designed to detect and predict the following events:
+1.  Container with fresh produce that has spoiled.
+2.  Container is on fire.
+3.  Container refrigeration unit has failed.
+4.  Container refrigeration unit power consumption is abnormal.
+5.  Container temp is outside defined range.
+6.  Ship arrival time estimate.
 
-TODO: Add more complete rules and models here.
+TODO: Add more complete rules and models used to do these predictions.
 
 ### Decide: Filter the Results
 
@@ -82,7 +87,7 @@ stage where action is taken.
 
 ### Act: Generate Output
 
-TODO.
+TODO:
 
 ## Development Environment
 
@@ -113,7 +118,7 @@ python --version
 ```
 Some open source packages for IBM Streams are required for this application.  
 In some cases, specific versions have been selected for compatibility reasons.
-To install these packages, run the follow commands from your python virtual environment.
+To install these packages, run the following commands from your python virtual environment.
 
 ```bash
 pip install streamsx
@@ -133,7 +138,7 @@ TODO: describe managing the cloud environment here.
 
 ## Build and Execute the Application
 
-The following script performs the application build and submits it to the IBM Cloud Streaming Analytics service.  Once it has been successfully run, the application will be running on the cloud waiting for input events and producing output events in response on the Event Streams buses.
+The following script performs the application build and submits it to the IBM Cloud Streaming Analytics service.  Once it has been successfully run, the application will be running on the cloud connected to the Event Streams bus monitoring for input events.
 
 ```bash
 ReeferMonRun.sh
