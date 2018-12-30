@@ -128,13 +128,13 @@ class Heatwave():
 
 
 
-def monitor(job_name, name_space, mh_topic, redis_base=None):
+def monitor(job_name, name_space, mh_topic, redis_base=None, topic={'ship':'bluewaterShip', 'container':'bluewaterContainer', 'problem':'bluewaterProblem'}):
     topo = Topology(job_name, name_space)
     topo.add_pip_package('streamsx.messagehub')
     # fetch and tag tuples
-    shipMh = streamsx.messagehub.subscribe(topo, schema=CommonSchema.Json, topic="bluewaterShip", name="shipMH")
+    shipMh = streamsx.messagehub.subscribe(topo, schema=CommonSchema.Json, topic=topic['ship'], name="shipMH")
     shipMh = shipMh.map(TagTuple("ship"), name="shipTag")
-    containerMh = streamsx.messagehub.subscribe(topo, schema=CommonSchema.Json, topic="bluewaterContainer",
+    containerMh = streamsx.messagehub.subscribe(topo, schema=CommonSchema.Json, topic=topic['container'],
                                                 name="containerMH")
     containerMh = containerMh.map(TagTuple("container"), name="containerTag")
     # normalize the tuples
@@ -156,7 +156,7 @@ def monitor(job_name, name_space, mh_topic, redis_base=None):
     formatted.sink(TransmitRedis(credentials=credential.redisCredential,
                                      dest_key=redis_base + "/bluewater/notify", chunk_count=100), name="notifyRedis")
     messageProblem = formatted.as_json(name="castJson")
-    streamsx.messagehub.publish(messageProblem, topic="bluewaterProblem", name="problemMH")
+    streamsx.messagehub.publish(messageProblem, topic=topic['problem'], name="problemMH")
 
     return topo
 

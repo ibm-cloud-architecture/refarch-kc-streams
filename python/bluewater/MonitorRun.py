@@ -42,8 +42,9 @@ if __name__ == '__main__':
 
     topology = None
     if args.run == "mon":
+        topics={"ship":"magsShip","container":"magsContainer","problem":"magsProblem" }
         topology = reeferMon.monitor(job_name=args.jobName, name_space=args.nameSpace,
-                   mh_topic=args.mhTopic, redis_base=args.redisBase)
+                   mh_topic=args.mhTopic, redis_base=args.redisBase, topic=topics)
     if args.run == "range":
         topology = reeferRange.monitor(job_name=args.jobName, name_space=args.nameSpace,
                    mh_topic=args.mhTopic, redis_base=args.redisBase)

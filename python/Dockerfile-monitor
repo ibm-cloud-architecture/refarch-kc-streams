@@ -1,0 +1,35 @@
+##
+FROM ibmjava:8-sdk
+RUN apt-get update -y
+## Install Anaconda3
+RUN apt-get install bzip2
+WORKDIR /ins
+# ADD  Anaconda3-4.2.0-Linux-x86_64.sh .
+RUN wget https://repo.continuum.io/archive/Anaconda3-4.2.0-Linux-x86_64.sh
+RUN bash ./Anaconda3-4.2.0-Linux-x86_64.sh -b -p /anaconda3
+ENV PATH /anaconda3/bin:${PATH}
+
+
+WORKDIR /app
+CMD ["python", "-V"]
+## Install the application...
+WORKDIR /app
+ADD bluewater/*.py bluewater/
+ADD shared/*.py bluewater/shared/
+ADD shared/__init__.py bluewater/shared/
+ADD shared/creds/credential.py bluewater/shared/creds/
+ENV PYTHONPATH "/app/bluewater/shared:/app/bluewater/shared/creds"
+run pip install streamsx
+run pip install streamsx.messagehub
+run pip install redis
+# Submit the application.
+WORKDIR /app/bluewater
+CMD [ "python", "MonitorRun.py","--run","mon"]
+
+
+
+
+
+
+
+
