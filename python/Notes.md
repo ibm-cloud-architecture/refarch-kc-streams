@@ -13,4 +13,13 @@ To Submit
 docker run -t cloudstreams 
 ```
 
+To debug
+```bash
+docker run -it cloudstreams bash 
+``` 
+
+## StreamsSubmit : submits to streams instance. 
+Option --run  
+- mon : bluewater/reeferMon
+- simulator :  
 

@@ -14,17 +14,28 @@ WORKDIR /app
 CMD ["python", "-V"]
 ## Install the application...
 WORKDIR /app
+ADD StreamsSubmit.py .
 ADD bluewater/*.py bluewater/
+# Running the simulator requires that you 'ADD' the
+# simulation files *.json.
+ADD containerSimulator/*.py containerSimulator/
+# ADD containerSimulator/*.json containerSimulator/
+
 ADD shared/*.py bluewater/shared/
 ADD shared/__init__.py bluewater/shared/
 ADD shared/creds/credential.py bluewater/shared/creds/
-ENV PYTHONPATH "/app/bluewater/shared:/app/bluewater/shared/creds"
+
+ENV PYTHONPATH "/app/bluewater:/app/containerSimulator:/app/bluewater/shared:/app/bluewater/shared/creds"
 run pip install streamsx
 run pip install streamsx.messagehub
 run pip install redis
 # Submit the application.
-WORKDIR /app/bluewater
-CMD [ "python", "MonitorRun.py","--run","mon"]
+WORKDIR /app
+# python StreamsSubmit.py --run mon --jobName magsMon --nameSpace magsMon
+CMD [ "python", "StreamsSubmit.py","--run","mon","--jobName","magsMon","--nameSpace","magsMon"]
+# python StreamsSubmit.py --run simulator --jobName magsSim --nameSpace magsSim
+#CMD [ "python", "StreamsSubmit.py","--run","simulator","--jobName","magsSim","--nameSpace","magSim"]
+
 
 
 

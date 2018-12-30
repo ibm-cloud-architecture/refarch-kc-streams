@@ -27,7 +27,7 @@ import time
 import datetime
 import argparse
 
-import streamsx.messagehub as messagehub
+import streamsx.messagehub
 
 import credential
 from streamsx.topology.topology import *
@@ -61,6 +61,7 @@ class FileFeed(object):
 
     def __enter__(self):
         fullFilePath = os.path.join(streamsx.ec.get_application_directory(), 'etc', self.filename)
+        print("fullFilePath:", fullFilePath)
         self.data = read_data(fullFilePath)
         self.datalen = len(self.data)
         self.idx = 0
@@ -95,13 +96,22 @@ def containerData(iDict):
 
 
 
-def json2FileHub(jobName, nameSpace, mhTopic, jsonDataPath, message_wait):
-    topo = Topology(jobName, nameSpace)
+def json2FileHub(jobName, nameSpace, jsonDataPath, message_wait, topic={'ship':'bluewaterShip','container':'bluewaterContainer','problem':'bluewaterProblem'}):
+    """
 
+    :param jobName:
+    :param nameSpace:
+    :param topic: dictionary with with destination topics : ship, container
+    :param jsonDataPath:
+    :param message_wait:  time to wait between messages
+    :return:
+    """
+    topo = Topology(jobName, nameSpace)
+    topo.add_pip_package('streamsx.messagehub')
     # Add the file to the sab so it will be in etc when deployed
     topo.add_file_dependency(jsonDataPath, "etc")
     jsonDataFile = os.path.basename(jsonDataPath)
-    print(jsonDataFile)
+    print("jsonDataFile:", jsonDataFile)
     allEvents = topo.source(FileFeed(filename=jsonDataFile, intermessageWait=message_wait))
 
     shipStream = allEvents.map(shipData, name="shipData")
@@ -110,8 +120,8 @@ def json2FileHub(jobName, nameSpace, mhTopic, jsonDataPath, message_wait):
     shipJson = shipStream.as_json(name="shipJson")
     containerJson = containerStream.as_json(name="containerJson")
 
-    messagehub.publish(shipJson, topic="bluewaterShip", name="shipMH")
-    messagehub.publish(containerJson, topic="bluewaterContainer", name="containerMH")
+    streamsx.messagehub.publish(shipJson, topic=topic['ship'], name="shipMH")
+    streamsx.messagehub.publish(containerJson, topic=topic['container'], name="containerMH")
     return topo
 
 

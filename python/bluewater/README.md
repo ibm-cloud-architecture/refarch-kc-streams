@@ -4,22 +4,15 @@ Triton (/ˈtraɪtən/; Greek: Τρίτων Tritōn) is a mythological Greek god,
 
 Processes tuples arriving via MessageHub
 
-## MonitorRun.py
-Submits the reefer jobs
 
 ### reeferMon.py
 Submit a job to the build server if it finishes successfully the job is submitted to Streaming Analatics Streaming3Turbine. 
 Messages come in bluewaterShip & bluewaterContainer - when a notification needs to happen it goes out bluewaterProblem.
 
-Use ReeferMonRun.sh to run from the command line. 
+Use scripts/submitMonitor.sh to run from the command line. 
  
-
-
-##
-
-
 ### reeferRange.py 
-Based upon threashold file values are filtered an averaged.   
+Based upon threshold file values are filtered an averaged.   
 
 ## TestMonitory.py
 Will drive the tests when I work out issues with the test harness. 
