@@ -89,6 +89,7 @@ stage where action is taken.
 
 TODO:
 
+
 ## Development Environment
 
 Application development can be done on any Linux system with the necessary packages installed.
@@ -96,7 +97,30 @@ Build is performed with a cloud based service and the application execution also
 cloud based service.  Because this application leverages cloud services, there is no need to
 install IBM Streams on your development system.
 
-### Prerequisites
+### Docker invocation
+
+A docker image is provided that will build and submit the the application to the cloud server. 
+
+It's assumed that you have installed Docker. 
+
+#### Docker build
+Build an image that will submit the application to the cloud. Based upon IBM Java9 with Anaconda Python 3.5
+ 
+```bash
+cd python
+docker build -t cloudstreams -f Dockerfile-monitor. 
+```
+#### Docker run
+Submit the the monitor application to cloud server. On completion of the submission, the image
+is exited.   
+```bash
+cd python
+docker run -t cloudstreams -f 
+```
+
+
+
+### Prerequisites * Local 
 
 The application has been written and validated with Python version 3.5, so that version is recommended
 for running this application.
@@ -141,20 +165,18 @@ TODO: describe managing the cloud environment here.
 The following script performs the application build and submits it to the IBM Cloud Streaming Analytics service.  Once it has been successfully run, the application will be running on the cloud connected to the Event Streams bus monitoring for input events.
 
 ```bash
-ReeferMonRun.sh
+cd scipts
+source submit_Monitor.sh
 ```
 
 # Items that will be depricated and removed.
 
-SmokeTest for all the components. Sends EGK data at 1sec intervals. 
-```bash
-SmokeTestEKG.py
-```
- 
 Run the following script to start the simulator:
 ```bash
-SimulatorRun.sh
+cd scipts
+source submit_Simulator.sh
 ```
+
 
 ## References 
  - [Developing IMG Streams Applications with Phython](http://ibmstreams.github.io/streamsx.documentation/docs/python/1.6/python-appapi-devguide/index.html)
