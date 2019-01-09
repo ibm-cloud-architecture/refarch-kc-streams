@@ -90,25 +90,36 @@ stage where action is taken.
 TODO:
 
 
-## Development Environment
+## Application Development and Deployment 
+
+### Development Environment
 
 Application development can be done on any Linux system with the necessary packages installed.
 Build is performed with a cloud based service and the application execution also occurs on a 
 cloud based service.  Because this application leverages cloud services, there is no need to
 install IBM Streams on your development system.
 
-### Docker invocation
+Prerequisit software includes Git, Docker, and the kc-streams application.
+To instal Docker see [Docker Documentation](https://docs.docker.com/) for instructions for your platform.
 
-A docker image is provided that will build and submit the the application to the cloud server. 
+Git can be installed following instructions found on [GitHub.com](https://github.com/).
 
-It's assumed that you have installed Docker. 
+The application can be installed with the following command:
+```bash
+git clone git@github.com:ibm-cloud-architecture/refarch-kc-streams.git
+```
+#### Docker Image Build
 
-#### Docker build
+### Docker Invocation
+
+A docker image configuration file is provided that will build and submit the the application 
+to the cloud server. 
+
 Build an image that will submit the application to the cloud. Based upon IBM Java9 with Anaconda Python 3.5
  
 ```bash
 cd python
-docker build -t cloudstreams -f Dockerfile-monitor. 
+sudo docker build -t cloudstreams -f ./Dockerfile-monitor . 
 ```
 #### Docker run
 Submit the the monitor application to cloud server. On completion of the submission, the image
@@ -117,8 +128,33 @@ is exited.
 cd python
 docker run -t cloudstreams -f 
 ```
+```
+## IBM Cloud Streaming Analytics Instance
 
+### Create the Environment
 
+TODO: describe creating the cloud environment here. 
+
+### Manage the Environment
+
+TODO: describe managing the cloud environment here. 
+
+## Build and Execute the Application
+
+The following script performs the application build and submits it to the IBM Cloud Streaming Analytics service.  Once it has been successfully run, the application will be running on the cloud connected to the Event Streams bus monitoring for input events.
+
+```bash
+cd scipts
+source submit_Monitor.sh
+```
+
+# Items that will be depricated and removed.
+
+Run the following script to start the simulator:
+```bash
+cd scipts
+source submit_Simulator.sh
+```
 
 ### Prerequisites * Local 
 
@@ -149,34 +185,6 @@ pip install streamsx
 pip install --upgrade streamsx==1.11.3a0
 pip install streamsx.messagehub
 pip install redis 
-```
-## IBM Cloud Streaming Analytics Instance
-
-### Create the Environment
-
-TODO: describe creating the cloud environment here. 
-
-### Manage the Environment
-
-TODO: describe managing the cloud environment here. 
-
-## Build and Execute the Application
-
-The following script performs the application build and submits it to the IBM Cloud Streaming Analytics service.  Once it has been successfully run, the application will be running on the cloud connected to the Event Streams bus monitoring for input events.
-
-```bash
-cd scipts
-source submit_Monitor.sh
-```
-
-# Items that will be depricated and removed.
-
-Run the following script to start the simulator:
-```bash
-cd scipts
-source submit_Simulator.sh
-```
-
 
 ## References 
  - [Developing IMG Streams Applications with Phython](http://ibmstreams.github.io/streamsx.documentation/docs/python/1.6/python-appapi-devguide/index.html)
