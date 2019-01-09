@@ -121,14 +121,16 @@ Build an image that will submit the application to the cloud. Based upon IBM Jav
 cd python
 sudo docker build -t cloudstreams -f ./Dockerfile-monitor . 
 ```
+
 #### Docker run
 Submit the the monitor application to cloud server. On completion of the submission, the image
 is exited.   
+
 ```bash
 cd python
 docker run -t cloudstreams -f 
 ```
-```
+
 ## IBM Cloud Streaming Analytics Instance
 
 ### Create the Environment
@@ -185,9 +187,10 @@ pip install streamsx
 pip install --upgrade streamsx==1.11.3a0
 pip install streamsx.messagehub
 pip install redis 
+```
 
 ## References 
- - [Developing IMG Streams Applications with Phython](http://ibmstreams.github.io/streamsx.documentation/docs/python/1.6/python-appapi-devguide/index.html)
+ - [Developing IBM Streams Applications with Phython](http://ibmstreams.github.io/streamsx.documentation/docs/python/1.6/python-appapi-devguide/index.html)
 -  [Streams Python Tutorial](https://developer.ibm.com/courses/all/streaming-analytics-basics-python-developers/)  
  - [Streamsx Documentation](https://pypi.org/search/?q=streamsx)
  - [IBM Streams Documentation](http://ibmstreams.github.io/streamsx.documentation/) 
