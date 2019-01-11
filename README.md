@@ -94,9 +94,10 @@ TODO:
 
 ### Create the Cloud Based Environment
 
-First log into your IBM Cloud account.  Then to create a Streaming Analytics instance, 
+First log into your [IBM Cloud](http://cloud.ibm.com) account.  
+Then to create a Streaming Analytics instance, 
 - Select "Create Resource"
-- Search the catalog for Streaming Analytics and select the cooresponding item.
+- Search the catalog for "Streaming Analytics" and select the cooresponding item.
 - Select "Create"
 
 After the instance has been provisioned, credentials can be obtained by:
@@ -115,7 +116,6 @@ is no need to install IBM Streams on your local development system.
 
 Prerequisit software includes Git, Docker, and the kc-streams application.
 To instal Docker see [Docker Documentation](https://docs.docker.com/) for instructions for your platform.
-
 Git can be installed following instructions found on [GitHub.com](https://github.com/).
 
 #### Application Download
@@ -125,35 +125,39 @@ The application can be obtained from github.com with the following command:
 git clone git@github.com:ibm-cloud-architecture/refarch-kc-streams.git
 ```
 
-#### Application Download
+#### Application Configuration 
 
 Next the application requires configuration for your environment.  Edit the file found
-in the git repository at python/shared/creds/credential.py an insert the credentials obtained
-for the Streaming Analytics services as described above.
+in the git repository at:
+
+```bash
+refarch-kc-streams/python/shared/creds/credential.py 
+```
+and insert the credentials obtained for the Streaming Analytics services as described above.
 
 #### Docker Image Build
 
-A docker image configuration file is provided that will build and submit the the application 
-to the cloud server. 
+A docker image configuration file is provided that will build the application 
+for the cloud environment. 
 
 ```bash
-cd python
+cd refarch-kc-streams/python
 sudo docker build -t cloudstreams -f ./Dockerfile-monitor . 
 ```
 
 #### Docker run
-Submit the the monitor application to the cloud server. On completion of the submission, the image
-is exited.   
+Submit the the monitor application to the cloud server. 
 
 ```bash
-cd python
+cd refarch-kc-streams/python
 sudo docker run -t cloudstreams
 ```
+After the submission completes, you will be able to see the application running from your
+IBM Cloud web console.
 
 # Items that will be depricated and removed.
 
 ## IBM Cloud Streaming Analytics Instance
-
 
 The following script performs the application build and submits it to the IBM Cloud Streaming Analytics service.  Once it has been successfully run, the application will be running on the cloud connected to the Event Streams bus monitoring for input events.
 
