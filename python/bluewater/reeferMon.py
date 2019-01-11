@@ -153,8 +153,8 @@ def monitor(job_name, name_space, redis_base=None, topic={'ship':'bluewaterShip'
 
     # colsolidate notification - redis + messagehub
     formatted = formatFire.union({formatDown, formatHeatwave})
-    formatted.sink(TransmitRedis(credentials=credential.redisCredential,
-                                     dest_key=redis_base + "/bluewater/notify", chunk_count=100), name="notifyRedis")
+    # formatted.sink(TransmitRedis(credentials=credential.redisCredential,
+    #                                  dest_key=redis_base + "/bluewater/notify", chunk_count=100), name="notifyRedis")
     messageProblem = formatted.as_json(name="castJson")
     streamsx.messagehub.publish(messageProblem, topic=topic['problem'], name="problemMH")
 

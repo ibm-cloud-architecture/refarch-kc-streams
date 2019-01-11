@@ -19,11 +19,12 @@ ADD bluewater/*.py bluewater/
 # Running the simulator requires that you 'ADD' the
 # simulation files *.json.
 ADD containerSimulator/*.py containerSimulator/
-# ADD containerSimulator/*.json containerSimulator/
+ADD containerSimulator/*.json containerSimulator/
 
 ADD shared/*.py shared/
 ADD shared/creds/credential.py shared/creds/
 
+# ENV PYTHONPATH "/app/bluewater:/app/shared:/app/shared/creds"
 ENV PYTHONPATH "/app/bluewater:/app/containerSimulator:/app/shared:/app/shared/creds"
 run pip install streamsx
 run pip install streamsx.messagehub

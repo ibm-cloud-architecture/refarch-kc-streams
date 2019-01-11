@@ -92,56 +92,68 @@ TODO:
 
 ## Application Development and Deployment 
 
-### Development Environment
+### Create the Cloud Based Environment
 
-Application development can be done on any Linux system with the necessary packages installed.
-Build is performed with a cloud based service and the application execution also occurs on a 
-cloud based service.  Because this application leverages cloud services, there is no need to
-install IBM Streams on your development system.
+First log into your IBM Cloud account.  Then to create a Streaming Analytics instance, 
+- Select "Create Resource"
+- Search the catalog for Streaming Analytics and select the cooresponding item.
+- Select "Create"
+
+After the instance has been provisioned, credentials can be obtained by:
+- Select the new Streaming Analytics service which is shown on the cloud resource list
+- In the detailed view, select "Serice credentials"
+- Select "New credential" and then "Add"
+- View the resulting credential and save it for later use. 
+
+### Local Development Environment
+
+Application development can be done on any Linux, MacOS, or Windows system with the necessary 
+packages installed.  Note that specific instructions given on this page assume a Linux system.
+Build is performed with a cloud based service and the application execution 
+also occurs on a cloud based service.  Because this application leverages cloud services, there 
+is no need to install IBM Streams on your local development system.
 
 Prerequisit software includes Git, Docker, and the kc-streams application.
 To instal Docker see [Docker Documentation](https://docs.docker.com/) for instructions for your platform.
 
 Git can be installed following instructions found on [GitHub.com](https://github.com/).
 
-The application can be installed with the following command:
+#### Application Download
+
+The application can be obtained from github.com with the following command:
 ```bash
 git clone git@github.com:ibm-cloud-architecture/refarch-kc-streams.git
 ```
-#### Docker Image Build
 
-### Docker Invocation
+#### Application Download
+
+Next the application requires configuration for your environment.  Edit the file found
+in the git repository at python/shared/creds/credential.py an insert the credentials obtained
+for the Streaming Analytics services as described above.
+
+#### Docker Image Build
 
 A docker image configuration file is provided that will build and submit the the application 
 to the cloud server. 
 
-Build an image that will submit the application to the cloud. Based upon IBM Java9 with Anaconda Python 3.5
- 
 ```bash
 cd python
 sudo docker build -t cloudstreams -f ./Dockerfile-monitor . 
 ```
 
 #### Docker run
-Submit the the monitor application to cloud server. On completion of the submission, the image
+Submit the the monitor application to the cloud server. On completion of the submission, the image
 is exited.   
 
 ```bash
 cd python
-docker run -t cloudstreams -f 
+sudo docker run -t cloudstreams
 ```
+
+# Items that will be depricated and removed.
 
 ## IBM Cloud Streaming Analytics Instance
 
-### Create the Environment
-
-TODO: describe creating the cloud environment here. 
-
-### Manage the Environment
-
-TODO: describe managing the cloud environment here. 
-
-## Build and Execute the Application
 
 The following script performs the application build and submits it to the IBM Cloud Streaming Analytics service.  Once it has been successfully run, the application will be running on the cloud connected to the Event Streams bus monitoring for input events.
 
@@ -149,8 +161,6 @@ The following script performs the application build and submits it to the IBM Cl
 cd scipts
 source submit_Monitor.sh
 ```
-
-# Items that will be depricated and removed.
 
 Run the following script to start the simulator:
 ```bash
