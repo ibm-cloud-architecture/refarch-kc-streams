@@ -94,8 +94,7 @@ TODO:
 
 ### Create the Cloud Based Environment
 
-First log into your [IBM Cloud](http://cloud.ibm.com) account.  
-Then to create a Streaming Analytics instance, 
+First log into your [IBM Cloud](http://cloud.ibm.com) account.  Then to create a Streaming Analytics instance, follow these steps:
 - Select "Create Resource"
 - Search the catalog for "Streaming Analytics" and select the cooresponding item.
 - Select "Create"
@@ -115,8 +114,9 @@ also occurs on a cloud based service.  Because this application leverages cloud 
 is no need to install IBM Streams on your local development system.
 
 Prerequisit software includes Git, Docker, and the kc-streams application.
-To instal Docker see [Docker Documentation](https://docs.docker.com/) for instructions for your platform.
-Git can be installed following instructions found on [GitHub.com](https://github.com/).
+To instal Docker see the [Docker Documentation](https://docs.docker.com/) for instructions 
+for your platform.  Git can be installed following instructions 
+found on [GitHub.com](https://github.com/).
 
 #### Application Download
 
