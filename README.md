@@ -77,8 +77,6 @@ The application has been designed to detect and predict the following events:
 5.  Container temp is outside defined range.
 6.  Ship arrival time estimate.
 
-TODO: Add more complete rules and models used to do these predictions.
-
 ### Decide: Filter the Results
 
 This stages takes the detection and predictive outputs of the prior stages and makes a decision
@@ -86,9 +84,6 @@ as to whether a finding of interest has been made.  If one has, the event is pro
 stage where action is taken. 
 
 ### Act: Generate Output
-
-TODO:
-
 
 ## Application Development and Deployment 
 
@@ -154,54 +149,6 @@ sudo docker run -t cloudstreams
 ```
 After the submission completes, you will be able to see the application running from your
 IBM Cloud web console.
-
-# Items that will be deprecated and removed.
-
-## IBM Cloud Streaming Analytics Instance
-
-The following script performs the application build and submits it to the IBM Cloud Streaming Analytics service.  Once it has been successfully run, the application will be running on the cloud connected to the Event Streams bus monitoring for input events.
-
-```bash
-cd scipts
-source submit_Monitor.sh
-```
-
-Run the following script to start the simulator:
-```bash
-cd scipts
-source submit_Simulator.sh
-```
-
-### Prerequisites * Local 
-
-The application has been written and validated with Python version 3.5, so that version is recommended
-for running this application.
-
-First, ensure that Python 3.5 is installed on your system:
-```bash
-python3.5 --version
-```
-If it is not installed, follow the process described by your OS vendor.  As an example, for CentOS:
-```bash
-sudo yum install python35u
-```
-
-Next you will need to set up a Python 3.5 virtual environment, as follows: 
-```bash
-virtualenv --python=python3.5 .venv
-source .venv/bin/activate
-python --version
-```
-Some open source packages for IBM Streams are required for this application.  
-In some cases, specific versions have been selected for compatibility reasons.
-To install these packages, run the following commands from your python virtual environment.
-
-```bash
-pip install streamsx
-pip install --upgrade streamsx==1.11.3a0
-pip install streamsx.messagehub
-pip install redis 
-```
 
 ## References 
  - [Developing IBM Streams Applications with Phython](http://ibmstreams.github.io/streamsx.documentation/docs/python/1.6/python-appapi-devguide/index.html)
