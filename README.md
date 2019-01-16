@@ -122,13 +122,14 @@ git clone git@github.com:ibm-cloud-architecture/refarch-kc-streams.git
 
 #### Application Configuration 
 
-Next the application requires configuration for your environment.  Edit the file found
-in the git repository at:
+Next the application requires configuration for your environment.  Copy the example
+file found in the git repository to the file that will hold the actual credentials:
 
 ```bash
-refarch-kc-streams/python/shared/creds/credential.py 
+cp refarch-kc-streams/python/shared/creds/credential.example refarch-kc-streams/python/shared/creds/credential.py 
 ```
-and insert the credentials obtained for the Streaming Analytics services as described above.
+and insert the credentials obtained for the Streaming Analytics services (as described above)
+into the credential.py file.
 
 #### Docker Image Build
 
