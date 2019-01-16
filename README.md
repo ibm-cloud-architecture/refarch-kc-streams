@@ -155,7 +155,7 @@ sudo docker run -t cloudstreams
 After the submission completes, you will be able to see the application running from your
 IBM Cloud web console.
 
-# Items that will be depricated and removed.
+# Items that will be deprecated and removed.
 
 ## IBM Cloud Streaming Analytics Instance
 
