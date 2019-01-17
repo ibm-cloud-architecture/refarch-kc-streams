@@ -126,15 +126,15 @@ git clone git@github.com:ibm-cloud-architecture/refarch-kc-streams.git
 Next the application requires configuration for your environment.
 Specifically you must edit the credential for the streaming analaytics cloud service you have created in a previous step 
 The template file refarch-kc-streams/python/shared/creds/credential.template.py  consists of two python assignment statements
- - setting the key Steaming3Turbine to a dummy dummy credential with invalid values.
- - setting the key StreamsServices  to have the same value as Streaming3Turbine
+ - assign the key "Steaming3Turbine" to a dummy credential with invalid values.
+ - assign the key "StreamsServices"  to have the same value as "Streaming3Turbine"
  
- Apply the following edit steps to credential.Template.py - creating a new file credential.py 
+ Apply the following edit steps to credential.template.py - creating a new file credential.py 
   1.  Replace the dummy value assigned to Streaming3Turbine with the saved credential for your streaming analytics cloud service 
   2.  Leave the assignment to StreamsServces as is ( it is indirectly assigned to get the same value as Steaming3Turbine) 
   3.  Save the edited file to credential.py in the same directory 
 
-The new file credential.py is a valid python file setting up the keys expected by the refarch-kc-streams application with credential values personalized to your cloud run time environment 
+The new file credential.py is a valid python file setting up the keys expected by the refarch-kc-streams application with credential values personalized to your cloud run time environment.  Since this file contains active credential values it must not be pushed to any code repository where it is widely visible.  
 
 #### Docker Image Build
 
