@@ -1,14 +1,12 @@
 # README 
 
-The credential.py is derived from the credential.py.zip. Passing in the 'pwd' on the HUB applications will
-expland the file if it's necessary. 
+The file credential.py.zip  was used in an earlier version is not deleted. 
 
-When you update the file credential.py, rebuild the .zip file and check it in. The command to compress:
-```bash
-$ zip -e credential.py.zip credential.py
-```
-You'll be prompted for the password to use. 
+The file credential.example is now  deprecated  and replaced with credential.template.py.
 
-
-
-
+This renaming makes clear that the file: 
+ - is a valid python file  (.py) with python assignment statements 
+ - is just a template for credentials and contains no active credentials 
+ 
+ The configuration of these credentials is described in refarch-kc- streams in the section on configuring your application. 
+ 
