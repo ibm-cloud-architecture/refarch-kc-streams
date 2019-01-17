@@ -123,18 +123,19 @@ git clone git@github.com:ibm-cloud-architecture/refarch-kc-streams.git
 
 #### Application Configuration 
 
-Next the application requires configuration for your environment.
-Specifically you must edit the credential for the streaming analaytics cloud service you have created in a previous step 
-The template file refarch-kc-streams/python/shared/creds/credential.template.py  consists of two python assignment statements
+Now configure the application for your cloud runtime environment.
+Specifically you must edit a credential template to include the credential for the streaming analaytics cloud service you created and saved  in a previous step.
+You will edit the template file  "refarch-kc-streams/python/shared/creds/credential.template.py"
+This file contains python assignment statements which: 
  - assign the key "Steaming3Turbine" to a dummy credential with invalid values.
  - assign the key "StreamsServices"  to have the same value as "Streaming3Turbine"
  
- Apply the following edit steps to credential.template.py - creating a new file credential.py 
+ Apply the following edit steps to credential.template.py - and save the results in a new file credential.py 
   1.  Replace the dummy value assigned to Streaming3Turbine with the saved credential for your streaming analytics cloud service 
   2.  Leave the assignment to StreamsServces as is ( it is indirectly assigned to get the same value as Steaming3Turbine) 
-  3.  Save the edited file to credential.py in the same directory 
+  3.  Save the edited file renaming credential.py in the same directory 
 
-The new file credential.py is a valid python file setting up the keys expected by the refarch-kc-streams application with credential values personalized to your cloud run time environment.  Since this file contains active credential values it must not be pushed to any code repository where it is widely visible.  
+The new file credential.py is a valid python file setting up the keys expected by the refarch-kc-streams application with credential values personalized to your cloud run time environment.  Since the edited file  credential.py contains credentials giving access to your personal example installation, visibility to this file must be properly controlled.  Unlike the credential.template.py it should not be pushed into  a widely visible code repository. 
 
 #### Docker Image Build
 
@@ -147,6 +148,8 @@ sudo docker build -t cloudstreams -f ./Dockerfile-monitor .
 ```
 
 #### Docker run
+Before submitting the minitor application to the cloud server, use the cloud console to check that your streaming analytics service is provision and started. 
+
 Submit the the monitor application to the cloud server. 
 
 ```bash
