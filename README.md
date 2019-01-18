@@ -96,7 +96,7 @@ First log into your [IBM Cloud](http://cloud.ibm.com) account.  Then to create a
 
 After the instance has been provisioned, credentials can be obtained by:
 - Select the new Streaming Analytics service which is shown on the cloud resource list
-- In the detailed view, select "Serice credentials"
+- In the detailed view, select "Service credentials"
 - Select "New credential" and then "Add"
 - View the resulting credential and save it to a file for later use. 
     -  The credential received is a single name value pair list enclosed in {  } setting values for credential fields: "apikey", "iam_apikey_description", "iam_apikey_name", "iam_role_crn", "iam_serviceid_crn", "v2_rest_url" 
