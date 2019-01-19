@@ -38,7 +38,7 @@ of a typical streaming application pipeline.
 
 ### Structure
 
-The following diagram shows the flow graph for the sample application.  Data is injested on the left
+The following diagram shows the flow graph for the sample application.  Data is ingested on the left
 side and flows through the operators to the outputs on the right.
 
 ![](streams-app.png)
@@ -133,7 +133,7 @@ This file contains python assignment statements which:
  Apply the following edit steps to credential.template.py - and save the results in a new file credential.py 
   1.  Replace the dummy value assigned to Streaming3Turbine with the saved credential for your streaming analytics cloud service 
   2.  Leave the assignment to StreamsServces as is ( it is indirectly assigned to get the same value as Steaming3Turbine) 
-  3.  Save the edited file renaming credential.py in the same directory 
+  3.  Save the edited file renaming it to: credential.py in the same directory 
 
 The new file credential.py is a valid python file setting up the keys expected by the refarch-kc-streams application with credential values personalized to your cloud run time environment.  Since the edited file  credential.py contains credentials giving access to your personal example installation, visibility to this file must be properly controlled.  Unlike the credential.template.py it should not be pushed into  a widely visible code repository. 
 
