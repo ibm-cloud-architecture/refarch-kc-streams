@@ -110,13 +110,13 @@ them to the Streaming Analytics instance with the following steps.
 - From the main IBM Cloud dashboard, select the Streaming Analtyics service you created.
 - In the Streaming Analytics dashboard, make sure the service is started, and then launch the console.
  ![](./StreamingAnalyticsDashboard.png)
-- On the left side, click the Application Configuration button.
+- Click the `Application Configuration` button.
  ![](./StreamsConsoleAppConfig1.png)
-- Click on the Application Configuration tab and then the Add Configuration button.
+- Click on the `Application Configuration` tab and then the `Add Configuration` button.
  ![](./StreamsConsoleAppConfig2.png)
-- In the name field, set the value to messagehub
+- In the name field, set the value to `messagehub`
 - Add a property to the table with the following details:
-    Name: messagehub.creds
+    Name: `messagehub.creds`
     Value: <Paste the Event Streams Service Credentials previously copied>
 - Save the Application Configuration.
  ![](./StreamsConsoleAppConfig3.png)
