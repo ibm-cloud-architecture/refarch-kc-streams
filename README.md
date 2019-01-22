@@ -108,18 +108,18 @@ After the instance has been provisioned, credentials can be obtained by:
 If you have not already configured an Event Streams service, follow the instructions [here](https://github.com/ibm-cloud-architecture/refarch-kc/blob/master/docs/prepare-ibm-cloud.md#event-streams-service-on-ibm-cloud).  Copy the Event Streams credentials that were created as part of the configuration process, and add
 them to the Streaming Analytics instance with the following steps.
 - From the main IBM Cloud dashboard, select the Streaming Analtyics service you created.
-- In the Streaming Analytics dashboard, make sure the service is started, and then launch the console
+- In the Streaming Analytics dashboard, make sure the service is started, and then launch the console.
  ![](./StreamingAnalyticsDashboard.png)
-- On the navigation bar at the top, open the Application Dashboard
-- On the left side, click the Application Configuration button
-- Click on the Application Configuration tab
-- Click the Add Configuration button
+- On the left side, click the Application Configuration button.
+ ![](./StreamsConsoleAppConfig1.png)
+- Click on the Application Configuration tab and then the Add Configuration button.
+ ![](./StreamsConsoleAppConfig2.png)
 - In the name field, set the value to messagehub
 - Add a property to the table with the following details:
     Name: messagehub.creds
-    Value: <Event Streams Service Credentials JSON>
-- Save the application configuration
-
+    Value: <Paste the Event Streams Service Credentials previously copied>
+- Save the Application Configuration.
+ ![](./StreamsConsoleAppConfig3.png)
 
 ### Local Development Environment
 
